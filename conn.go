@@ -1234,7 +1234,8 @@ func (c *Conn) handleDataLMTP() {
 
 func dataErrorToStatus(err error) (code int, enchCode EnhancedCode, msg string) {
 	if err != nil {
-		if smtperr, ok := err.(*SMTPError); ok {
+		var smtperr *SMTPError
+		if errors.As(err, &smtperr) {
 			return smtperr.Code, smtperr.EnhancedCode, smtperr.Message
 		} else {
 			return 554, EnhancedCode{5, 0, 0}, "Error: transaction failed: " + err.Error()
@@ -1290,7 +1291,8 @@ func (c *Conn) writeResponse(code int, enhCode EnhancedCode, text ...string) {
 }
 
 func (c *Conn) writeError(code int, enhCode EnhancedCode, err error) {
-	if smtpErr, ok := err.(*SMTPError); ok {
+	var smtpErr *SMTPError
+	if errors.As(err, &smtpErr) {
 		c.writeResponse(smtpErr.Code, smtpErr.EnhancedCode, smtpErr.Message)
 	} else {
 		c.writeResponse(code, enhCode, err.Error())

@@ -197,7 +197,8 @@ func TestBasic_SMTPError(t *testing.T) {
 	if err == nil {
 		t.Fatal("MAIL succeeded")
 	}
-	smtpErr, ok := err.(*SMTPError)
+	var smtpErr *SMTPError
+	ok := errors.As(err, &smtpErr)
 	if !ok {
 		t.Fatal("Returned error is not SMTPError")
 	}
@@ -215,7 +216,7 @@ func TestBasic_SMTPError(t *testing.T) {
 	if err == nil {
 		t.Fatal("MAIL succeeded")
 	}
-	smtpErr, ok = err.(*SMTPError)
+	ok = errors.As(err, &smtpErr)
 	if !ok {
 		t.Fatal("Returned error is not SMTPError")
 	}
@@ -230,7 +231,7 @@ func TestBasic_SMTPError(t *testing.T) {
 	if err == nil {
 		t.Fatal("MAIL succeeded")
 	}
-	smtpErr, ok = err.(*SMTPError)
+	ok = errors.As(err, &smtpErr)
 	if !ok {
 		t.Fatal("Returned error is not SMTPError")
 	}
